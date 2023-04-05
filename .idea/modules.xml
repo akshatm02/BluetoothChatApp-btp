@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BluetoothChatApp-og.iml" filepath="$PROJECT_DIR$/.idea/BluetoothChatApp-og.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-og.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BluetoothChatApp-btp.iml" filepath="$PROJECT_DIR$/.idea/modules/BluetoothChatApp-btp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BluetoothChatApp-btp.app.unitTest.iml" />
     </modules>
   </component>
 </project>

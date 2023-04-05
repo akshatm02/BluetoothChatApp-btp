@@ -1,4 +1,4 @@
-package com.androidtut.qaifi.bluetoothchatapp;
+package com.androidProject.BTP.bluetoothchatapp;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -22,6 +22,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+//import java.text.FieldPosition;
+//import java.text.Format;
+//import java.text.ParsePosition;
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.ListIterator;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
@@ -53,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_STATE_CHANGED:
                     switch (message.arg1) {
                         case ChatUtils.STATE_NONE:
-                            setState("Not Connected");
-                            break;
                         case ChatUtils.STATE_LISTEN:
                             setState("Not Connected");
                             break;
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_WRITE:
                     byte[] buffer1 = (byte[]) message.obj;
                     String outputBuffer = new String(buffer1);
+//                    StringAlignUtils util = new StringAlignUtils(70, StringAlignUtils.Alignment.RIGHT);
                     adapterMainChat.add("Me: " + outputBuffer);
                     break;
                 case MESSAGE_READ:

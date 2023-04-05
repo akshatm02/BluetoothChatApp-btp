@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.androidtut.qaifi.bluetoothchatapp.DeviceListActivity">
+    tools:context="com.androidProject.BTP.bluetoothchatapp.DeviceListActivity">
 
     <ProgressBar
         android:id="@+id/progress_scan_devices"
