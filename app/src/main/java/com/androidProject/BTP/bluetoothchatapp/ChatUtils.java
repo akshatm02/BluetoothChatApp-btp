@@ -1,4 +1,4 @@
-package com.androidtut.qaifi.bluetoothchatapp;
+package com.androidProject.BTP.bluetoothchatapp;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -15,10 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-
-/**
- * Created by Qaifi on 4/5/2018.
- */
 
 public class ChatUtils {
     private Context context;
@@ -243,17 +239,18 @@ public class ChatUtils {
             inputStream = tmpIn;
             outputStream = tmpOut;
         }
-
         public void run() {
             byte[] buffer = new byte[1024];
             int bytes;
+            while(true)
+            {
+                try {
+                    bytes = inputStream.read(buffer);
 
-            try {
-                bytes = inputStream.read(buffer);
-
-                handler.obtainMessage(MainActivity.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-            } catch (IOException e) {
-                connectionLost();
+                    handler.obtainMessage(MainActivity.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                } catch (IOException e) {
+                    connectionLost();
+                }
             }
         }
 
