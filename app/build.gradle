@@ -1,28 +1,28 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 26 // Specifies the version of the Android SDK that the app is compiled against
     defaultConfig {
-        applicationId "com.androidProject.BTP.bluetoothchatapp"
-        minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId "com.androidProject.BTP.bluetoothchatapp" // Specifies the unique package name of the app
+        minSdkVersion 19 // Specifies the minimum version of Android API that the app supports
+        targetSdkVersion 26 // Specifies the version of Android API that the app targets
+        versionCode 1 // Specifies the version code of the app
+        versionName "1.0" // Specifies the version name of the app
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner" // Specifies the test runner for the app
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false // Indicates whether code shrinking and obfuscation are enabled for the release build
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro' // Specifies the ProGuard configuration files for the release build
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar']) // Includes all JAR files in the libs directory
+    implementation 'com.android.support:appcompat-v7:26.1.0' // Includes the Android Support Library
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2' // Includes the ConstraintLayout library
+    testImplementation 'junit:junit:4.12' // Includes the JUnit testing framework
+    androidTestImplementation 'com.android.support.test:runner:1.0.1' // Includes the Android Test Support Library
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1' // Includes the Espresso testing framework
 }
