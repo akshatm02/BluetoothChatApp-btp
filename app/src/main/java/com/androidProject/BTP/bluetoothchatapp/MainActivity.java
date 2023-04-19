@@ -2,6 +2,7 @@ package com.androidProject.BTP.bluetoothchatapp;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +30,9 @@ import android.widget.Toast;
 //import java.util.ArrayList;
 //import java.util.List;
 //import java.util.ListIterator;
+
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
@@ -119,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         listMainChat.setAdapter(adapterMainChat);
 
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 String message = edCreateMessage.getText().toString();
@@ -130,12 +135,46 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+//    private void initBluetooth() {
+//        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        if (bluetoothAdapter == null) {
+//            Toast.makeText(context, "No bluetooth found", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
     private void initBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            Toast.makeText(context, "No bluetooth found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "No Bluetooth found", Toast.LENGTH_SHORT).show();
         }
+//        else {
+//            // Check if there are paired devices
+//            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+//            if (pairedDevices.size() > 0) {
+//                // Iterate through paired devices and try to connect
+////                for (BluetoothDevice device : pairedDevices) {
+////                    chatUtils.connect(device);
+////                }
+//                    for (BluetoothDevice device : pairedDevices) {
+//                        // Attempt to connect to the device
+//                        chatUtils.connect(device);
+//                        setState("Connecting to " + device.getName() + "...");
+//                        try {
+//                            // Wait for 5 seconds for the connection to be established
+//                            Thread.sleep(5000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        // Check if the connection was successful
+//                        if (chatUtils.getState() == ChatUtils.STATE_CONNECTED) {
+//                            setState("Connected to " + device.getName());
+//                            break;
+//                        }
+//                    }
+//            }
+//        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,7 +199,8 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
-        } else {
+        }
+        else {
             Intent intent = new Intent(context, DeviceListActivity.class);
             startActivityForResult(intent, SELECT_DEVICE);
         }
@@ -174,6 +214,32 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == SELECT_DEVICE && resultCode == RESULT_OK) {
+//            // Get a list of all paired devices
+//            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+//            if (pairedDevices.size() > 0) {
+//                // Loop through all paired devices
+//                for (BluetoothDevice device : pairedDevices) {
+//                    // Attempt to connect to the device
+//                    chatUtils.connect(device);
+//                    setState("Connecting to " + device.getName() + "...");
+//                    try {
+//                        // Wait for 5 seconds for the connection to be established
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    // Check if the connection was successful
+//                    if (chatUtils.getState() == ChatUtils.STATE_CONNECTED) {
+//                        setState("Connected to " + device.getName());
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
