@@ -45,7 +45,12 @@ public class ChatUtils extends AppCompatActivity {
         this.context = context;
         this.handler = handler;
 
-        state = STATE_LISTEN; // modified
+        state = STATE_NONE;
+//        if (acceptThread == null) {
+//            acceptThread = new AcceptThread();
+//            acceptThread.start();
+//        }
+//        setState(STATE_LISTEN);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
@@ -331,6 +336,7 @@ public class ChatUtils extends AppCompatActivity {
                     handler.obtainMessage(MainActivity.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
                 } catch (IOException e) {
                     connectionLost();
+                    break;
                 }
             }
         }

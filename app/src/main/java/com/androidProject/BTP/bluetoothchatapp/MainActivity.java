@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                             setState("Not Connected");
                             break;
                         case ChatUtils.STATE_CONNECTING:
+
                             setState("Connecting...");
                             break;
                         case ChatUtils.STATE_CONNECTED:
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("In the on create function!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 //            finish();
             System.out.println("Device List has been finished!");
             currentDeviceIndex = 0;
-            return;
+//            return;
         }
 //        for( BluetoothDevice device: pairedDevices){
 ////            BluetoothDevice firstElement = it.next();
@@ -223,15 +225,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // we have waited for 30 seconds, start the next iteration
-                // stopping the thread from line 214
-                chatUtils.stop(); // commented because chatUtils.connect() is calling chatUtils.stop(), no need to call separately now
                 System.out.println("Disconnecting the current connection: "+name);
+                chatUtils.stop();
+
+                if(!adapterMainChat.isEmpty()) adapterMainChat.clear();
 
                 startIteration(deviceList);
-                // adding print
-
             }
-        }, 20000);
+        }, 30000);
 //        currentIteration++;
 //        Intent intent = new Intent(context, DeviceListActivity.class);
 //        startActivityForResult(intent, SELECT_DEVICE);
@@ -283,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        System.out.println("I don't know when this function is getting called.");
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.length > 0 || grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                Intent intent = new Intent(context, DeviceListActivity.class);
