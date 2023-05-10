@@ -1,6 +1,7 @@
 package com.androidProject.BTP.bluetoothchatapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +34,7 @@ import android.widget.Toast;
 //import java.util.ListIterator;
 
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,13 +60,20 @@ public class MainActivity extends AppCompatActivity {
     public static final String TOAST = "toast";
     private String connectedDevice;
 
+    private static final String deviceAddress = "deviceAddress";
+
+    private static final int ACTIVITY_LIFETIME = 30000;
+
+    private int currentDeviceIndex = 0;
+
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
             switch (message.what) {
                 case MESSAGE_STATE_CHANGED:
                     switch (message.arg1) {
-                        case ChatUtils.STATE_NONE:
+                        case ChatUtils.STATE_NONE: System.out.println("State is assigned to be None");
                         case ChatUtils.STATE_LISTEN:
                             setState("Not Connected");
                             break;
@@ -71,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                             setState("Connecting...");
                             break;
                         case ChatUtils.STATE_CONNECTED:
+                            System.out.println("Step->5: Finally, I am in handleMessage of MainActivity.java!");
                             setState("Connected: " + connectedDevice);
                             break;
                     }
@@ -127,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = edCreateMessage.getText().toString();
+                System.out.println("message is: "+ message);
                 if (!message.isEmpty()) {
                     edCreateMessage.setText("");
                     chatUtils.write(message.getBytes());
@@ -135,43 +147,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    private void initBluetooth() {
-//        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (bluetoothAdapter == null) {
-//            Toast.makeText(context, "No bluetooth found", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
     private void initBluetooth() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(context, "No Bluetooth found", Toast.LENGTH_SHORT).show();
         }
 //        else {
-//            // Check if there are paired devices
-//            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-//            if (pairedDevices.size() > 0) {
-//                // Iterate through paired devices and try to connect
-////                for (BluetoothDevice device : pairedDevices) {
-////                    chatUtils.connect(device);
-////                }
-//                    for (BluetoothDevice device : pairedDevices) {
-//                        // Attempt to connect to the device
-//                        chatUtils.connect(device);
-//                        setState("Connecting to " + device.getName() + "...");
-//                        try {
-//                            // Wait for 5 seconds for the connection to be established
-//                            Thread.sleep(5000);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                        // Check if the connection was successful
-//                        if (chatUtils.getState() == ChatUtils.STATE_CONNECTED) {
-//                            setState("Connected to " + device.getName());
-//                            break;
-//                        }
-//                    }
-//            }
+//
 //        }
     }
 
@@ -195,59 +177,118 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    private void startIteration(ArrayList<BluetoothDevice> deviceList){
 
+        if(currentDeviceIndex >= deviceList.size()){
+            // we have processed all the devices, do something else
+            // for example, show a message or finish the current activity
+//            finish();
+            System.out.println("Device List has been finished!");
+            currentDeviceIndex = 0;
+            return;
+        }
+//        for( BluetoothDevice device: pairedDevices){
+////            BluetoothDevice firstElement = it.next();
+//            System.out.println("The first element is: " + device.getAddress() + " and its device: "+device.getName());
+//            String address = device.getAddress();
+//            Log.d("Selected Address", address);
+//
+//            Intent intent = new Intent();
+//            intent.putExtra("deviceAddress", address);
+//            startActivityForResult(intent, SELECT_DEVICE);
+////            setResult(Activity.RESULT_OK, intent);
+////            finish();
+////            System.out.println("Hey Shivam, complete this soon!");
+//            try {
+//                Thread.sleep(30000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        BluetoothDevice device = deviceList.get(currentDeviceIndex);
+        String address = device.getAddress();
+        String name = device.getName();
+        Log.d("Selected Address", address);
+        Log.d("Selected Device Name", name);
+
+//        Intent intent = new Intent();
+//        intent.putExtra(deviceAddress, address);
+//        startActivityForResult(intent, SELECT_DEVICE); // need to see where it goes
+        chatUtils.connect(bluetoothAdapter.getRemoteDevice(address));
+
+
+        currentDeviceIndex++;
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // we have waited for 30 seconds, start the next iteration
+                // stopping the thread from line 214
+                chatUtils.stop(); // commented because chatUtils.connect() is calling chatUtils.stop(), no need to call separately now
+                System.out.println("Disconnecting the current connection: "+name);
+
+                startIteration(deviceList);
+                // adding print
+
+            }
+        }, 20000);
+//        currentIteration++;
+//        Intent intent = new Intent(context, DeviceListActivity.class);
+//        startActivityForResult(intent, SELECT_DEVICE);
+
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (currentIteration < 3) {
+//                    finishActivity(1);
+//                    // start next iteration after a delay of 5 seconds
+//                    new Handler().postDelayed(() -> startIteration(), 5000);
+//                } else {
+//                    // we have completed the maximum number of iterations, do something else
+//                    // for example, show a message or finish the current activity
+//                    finish();
+//                }
+////                finishActivity(1);
+//            }
+//        }, 15000);
+    }
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
         }
         else {
-            Intent intent = new Intent(context, DeviceListActivity.class);
-            startActivityForResult(intent, SELECT_DEVICE);
+//            int i=0;
+//            while(i<3) {
+//                Intent intent = new Intent(context, DeviceListActivity.class);
+//                startActivityForResult(intent, SELECT_DEVICE);
+//                i++;
+//            }
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+            ArrayList<BluetoothDevice> deviceList = new ArrayList<>(pairedDevices);
+            currentDeviceIndex = 0;
+            startIteration(deviceList);
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SELECT_DEVICE && resultCode == RESULT_OK) {
-            String address = data.getStringExtra("deviceAddress");
-            chatUtils.connect(bluetoothAdapter.getRemoteDevice(address));
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        if (requestCode == SELECT_DEVICE && resultCode == RESULT_OK) {
-//            // Get a list of all paired devices
-//            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-//            if (pairedDevices.size() > 0) {
-//                // Loop through all paired devices
-//                for (BluetoothDevice device : pairedDevices) {
-//                    // Attempt to connect to the device
-//                    chatUtils.connect(device);
-//                    setState("Connecting to " + device.getName() + "...");
-//                    try {
-//                        // Wait for 5 seconds for the connection to be established
-//                        Thread.sleep(5000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    // Check if the connection was successful
-//                    if (chatUtils.getState() == ChatUtils.STATE_CONNECTED) {
-//                        setState("Connected to " + device.getName());
-//                        break;
-//                    }
-//                }
-//            }
+//            String address = data.getStringExtra(deviceAddress);
+//            System.out.println("device name obtained is(in onActivityResult) : " + address);
+//            chatUtils.connect(bluetoothAdapter.getRemoteDevice(address));
 //        }
+//        super.onActivityResult(requestCode, resultCode, data);
 //    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        System.out.println("I don't know when this function is getting called.");
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(context, DeviceListActivity.class);
-                startActivityForResult(intent, SELECT_DEVICE);
-            } else {
+            if (grantResults.length > 0 || grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Intent intent = new Intent(context, DeviceListActivity.class);
+//                startActivityForResult(intent, SELECT_DEVICE);
+//            } else {
                 new AlertDialog.Builder(context)
                         .setCancelable(false)
                         .setMessage("Location permission is required.\n Please grant")
@@ -283,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        System.out.println("In destroy function!");
         super.onDestroy();
         if (chatUtils != null) {
             chatUtils.stop();

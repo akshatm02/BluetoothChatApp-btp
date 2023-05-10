@@ -41,37 +41,37 @@ public class DeviceListActivity extends AppCompatActivity {
     }
 
     private void init() {
-        listPairedDevices = findViewById(R.id.list_paired_devices);
-        listAvailableDevices = findViewById(R.id.list_available_devices);
-        progressScanDevices = findViewById(R.id.progress_scan_devices);
+//        listPairedDevices = findViewById(R.id.list_paired_devices);
+//        listAvailableDevices = findViewById(R.id.list_available_devices);
+//        progressScanDevices = findViewById(R.id.progress_scan_devices);
 
-        adapterPairedDevices = new ArrayAdapter<String>(context, R.layout.device_list_item);
-        adapterAvailableDevices = new ArrayAdapter<String>(context, R.layout.device_list_item);
+//        adapterPairedDevices = new ArrayAdapter<String>(context, R.layout.device_list_item);
+//        adapterAvailableDevices = new ArrayAdapter<String>(context, R.layout.device_list_item);
 
-        listPairedDevices.setAdapter(adapterPairedDevices);
-        listAvailableDevices.setAdapter(adapterAvailableDevices);
+//        listPairedDevices.setAdapter(adapterPairedDevices);
+//        listAvailableDevices.setAdapter(adapterAvailableDevices);
 
-        listAvailableDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String info = ((TextView) view).getText().toString();
-                String address = info.substring(info.length() - 17);
-
-                Intent intent = new Intent();
-                intent.putExtra("deviceAddress", address);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
+//        listAvailableDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                String info = ((TextView) view).getText().toString();
+//                String address = info.substring(info.length() - 17);
+//
+//                Intent intent = new Intent();
+//                intent.putExtra("deviceAddress", address);
+//                setResult(RESULT_OK, intent);
+//                finish();
+//            }
+//        });
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
-        if (pairedDevices != null && pairedDevices.size() > 0) {
-            for (BluetoothDevice device : pairedDevices) {
-                adapterPairedDevices.add(device.getName() + "\n" + device.getAddress());
-            }
-        }
+//        if (pairedDevices != null && pairedDevices.size() > 0) {
+//            for (BluetoothDevice device : pairedDevices) {
+//                adapterPairedDevices.add(device.getName() + "\n" + device.getAddress());
+//            }
+//        }
 
         IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(bluetoothDeviceListener, intentFilter);
@@ -136,26 +136,21 @@ public class DeviceListActivity extends AppCompatActivity {
 //        for (Integer element : myList) {
 //            // do something with the element
 //        }
-        int i = 0;
         for( BluetoothDevice device: pairedDevices){
-//            System.out.println("The first element is: " + device.getAddress() + " and its device: "+device.getName());
-//            if(i==10) {
-//                BluetoothDevice firstElement = it.next();
-                System.out.println("The first element is: " + device.getAddress() + " and its device: "+device.getName());
-                String address = device.getAddress();
-                Log.d("Selected Address", address);
+//            BluetoothDevice firstElement = it.next();
+            System.out.println("The first element is: " + device.getAddress() + " and its device: "+device.getName());
+            String address = device.getAddress();
+            Log.d("Selected Address", address);
 
-                Intent intent = new Intent();
-                intent.putExtra("deviceAddress", address);
+            Intent intent = new Intent();
+            intent.putExtra("deviceAddress", address);
 
-                setResult(Activity.RESULT_OK, intent);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+            System.out.println("Hey shivam, complete this shit soon!");
 
-//                finish();
-//            }
-
-//            i++;
         }
-        finish();
+//        finish();
 //        if (it.hasNext()) {
 //            BluetoothDevice firstElement = it.next();
 //            System.out.println("The first element is: " + firstElement.getAddress());
